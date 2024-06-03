@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -21,6 +22,11 @@ public class AccountService implements IAccountService {
     private IAccountRepository iAccountRepository;
     @Autowired
     private IRoleRepository iRoleRepository;
+
+    @Override
+    public Optional<Accounts> findAccountByUsername(String username) {
+        return iAccountRepository.findAccountByUsername(username);
+    }
 
     @Override
     public Accounts saveUser(RegisterUser user) {
@@ -48,8 +54,20 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Accounts changePassword(ChangePassword changePassword) {
-//        if (!changePassword.getOldPassword().equals())
-        return null;
+    public void changePassword(String username, ChangePassword changePassword) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Optional<Accounts> optionalAccount = iAccountRepository.findAccountByUsername(username);
+        if (optionalAccount.isEmpty()) {
+            throw new Exception("User not found");
+        }
+        Accounts account = optionalAccount.get();
+        if (!passwordEncoder.matches(changePassword.getOldPassword(), account.getPassword())) {
+            throw new Exception("Wrong password");
+        }
+        if (!changePassword.getNewPassword().equals(changePassword.getConfirmNewPassword())) {
+            throw new Exception("The passwords do not match");
+        }
+        account.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+        iAccountRepository.save(account);
     }
 }

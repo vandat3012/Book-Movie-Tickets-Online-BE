@@ -1,6 +1,7 @@
 package com.example.bookmovieticketsonline.controller;
 
 import com.example.bookmovieticketsonline.config.service.JwtService;
+import com.example.bookmovieticketsonline.model.dto.ChangePassword;
 import com.example.bookmovieticketsonline.model.dto.RegisterUser;
 import com.example.bookmovieticketsonline.model.entity.Accounts;
 import com.example.bookmovieticketsonline.service.IAccountService;
@@ -36,6 +37,17 @@ public class AccountController {
     public ResponseEntity<?> logout (@RequestHeader("Authorization") String tokenHeader) {
         String token = tokenHeader.substring(7);
         jwtService.addToBlackList(token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("changePassword")
+    public ResponseEntity<?> changePassword (@RequestHeader ("Authorization") String tokenHeader
+                                             ,@RequestBody ChangePassword changePasswords
+    ) throws Exception {
+        String token = tokenHeader.substring(7);
+        String username = jwtService.getUsernameFromJwtToken(token);
+        iAccountService.findAccountByUsername(username);
+        iAccountService.changePassword(username,changePasswords);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
