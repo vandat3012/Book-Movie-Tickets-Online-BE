@@ -1,5 +1,6 @@
 package com.example.bookmovieticketsonline.service;
 
+import com.example.bookmovieticketsonline.model.dto.AddAccountInformation;
 import com.example.bookmovieticketsonline.model.dto.ChangePassword;
 import com.example.bookmovieticketsonline.model.dto.RegisterUser;
 import com.example.bookmovieticketsonline.model.entity.Accounts;
@@ -15,4 +16,6 @@ public interface IAccountService {
     List<Accounts> checkUsername(String username);
 
     void changePassword (String username,ChangePassword changePassword) throws Exception;
+
+    Accounts addAccountInformation (String username,AddAccountInformation information);
 }

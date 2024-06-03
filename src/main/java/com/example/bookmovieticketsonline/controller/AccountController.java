@@ -1,6 +1,7 @@
 package com.example.bookmovieticketsonline.controller;
 
 import com.example.bookmovieticketsonline.config.service.JwtService;
+import com.example.bookmovieticketsonline.model.dto.AddAccountInformation;
 import com.example.bookmovieticketsonline.model.dto.ChangePassword;
 import com.example.bookmovieticketsonline.model.dto.RegisterUser;
 import com.example.bookmovieticketsonline.model.entity.Accounts;
@@ -51,5 +52,14 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PostMapping("addInformation")
+    public ResponseEntity<?> addInformation (@RequestHeader ("Authorization") String tokenHeader
+                                             , @RequestBody AddAccountInformation information
+    ) {
+        String token = tokenHeader.substring(7);
+        String username = jwtService.getUsernameFromJwtToken(token);
+        iAccountService.findAccountByUsername(username);
+        iAccountService.addAccountInformation(username,information);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

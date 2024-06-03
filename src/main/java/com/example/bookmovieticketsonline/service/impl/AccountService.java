@@ -1,5 +1,6 @@
 package com.example.bookmovieticketsonline.service.impl;
 
+import com.example.bookmovieticketsonline.model.dto.AddAccountInformation;
 import com.example.bookmovieticketsonline.model.dto.ChangePassword;
 import com.example.bookmovieticketsonline.model.dto.RegisterUser;
 import com.example.bookmovieticketsonline.model.entity.Accounts;
@@ -69,5 +70,17 @@ public class AccountService implements IAccountService {
         }
         account.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
         iAccountRepository.save(account);
+    }
+
+    @Override
+    public Accounts addAccountInformation(String username,AddAccountInformation information) {
+        Accounts accounts = iAccountRepository.findAccountsByUsername(username);
+        accounts.setEmail(information.getEmail());
+        accounts.setAvatar(information.getAvatar());
+        accounts.setFull_name(information.getFull_name());
+        accounts.setPhone_number(information.getPhone_number());
+        accounts.setAddress(information.getAddress());
+        accounts.setStatus(information.getStatus());
+        return iAccountRepository.save(accounts);
     }
 }
