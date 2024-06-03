@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class JwtService {
     private static final String SECRET_KEY = "123456789987654321123456789987654321123456789";
     private static final long EXPIRE_TIME = 36000000L;
+    private Set<String> blackList = new HashSet<>();
 
     public String generateTokenLogin(Authentication authentication) {
         UsersPrinciple userPrincipal = (UsersPrinciple) authentication.getPrincipal();
@@ -32,6 +35,9 @@ public class JwtService {
     }
 
     public boolean validateJwtToken(String authToken) {
+        if (isBlacklisted(authToken)) {
+            return false;
+        }
         try {
             Jwts.parserBuilder()
                     .setSigningKey(SECRET_KEY)
@@ -59,4 +65,10 @@ public class JwtService {
                 .getSubject();
     }
 
+    public void addToBlackList (String token) {
+        blackList.add(token);
+    }
+    public boolean isBlacklisted(String token) {
+        return blackList.contains(token);
+    }
 }
