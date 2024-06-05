@@ -40,6 +40,9 @@ public class AccountService implements IAccountService {
         }
         Accounts account = new Accounts();
         account.setUsername(user.getUsername());
+        account.setEmail(user.getEmail());
+        account.setPhone_number(user.getPhone_number());
+        account.setStatus(user.getStatus());
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         account.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Roles rolesUser = iRoleRepository.findByName("ROLE_USER");
@@ -52,6 +55,11 @@ public class AccountService implements IAccountService {
     @Override
     public List<Accounts> checkUsername(String username) {
         return iAccountRepository.checkUsername(username);
+    }
+
+    @Override
+    public List<Accounts> checkEmail(String email) {
+        return iAccountRepository.checkEmail(email);
     }
 
     @Override
@@ -75,12 +83,16 @@ public class AccountService implements IAccountService {
     @Override
     public Accounts addAccountInformation(String username,AddAccountInformation information) {
         Accounts accounts = iAccountRepository.findAccountsByUsername(username);
-        accounts.setEmail(information.getEmail());
         accounts.setAvatar(information.getAvatar());
         accounts.setFull_name(information.getFull_name());
-        accounts.setPhone_number(information.getPhone_number());
         accounts.setAddress(information.getAddress());
-        accounts.setStatus(information.getStatus());
         return iAccountRepository.save(accounts);
+    }
+
+    @Override
+    public String findPasswordById(String username,Long id) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password = passwordEncoder.encode(iAccountRepository.findPasswordById(id));
+        return password;
     }
 }

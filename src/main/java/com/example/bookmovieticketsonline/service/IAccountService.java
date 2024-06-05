@@ -15,7 +15,11 @@ public interface IAccountService {
 
     List<Accounts> checkUsername(String username);
 
+    List<Accounts> checkEmail(String email);
+
     void changePassword (String username,ChangePassword changePassword) throws Exception;
 
     Accounts addAccountInformation (String username,AddAccountInformation information);
+
+    String findPasswordById(String username,Long id);
 }

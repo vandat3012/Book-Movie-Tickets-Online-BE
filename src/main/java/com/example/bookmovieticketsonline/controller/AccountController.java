@@ -7,6 +7,7 @@ import com.example.bookmovieticketsonline.model.dto.RegisterUser;
 import com.example.bookmovieticketsonline.model.entity.Accounts;
 import com.example.bookmovieticketsonline.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,12 @@ public class AccountController {
     @PostMapping("checkUsername")
     public ResponseEntity<List<Accounts>> checkUsername (@RequestParam String username) {
         List<Accounts> accounts = iAccountService.checkUsername(username);
+        return new ResponseEntity<>(accounts,HttpStatus.OK);
+    }
+
+    @PostMapping("checkEmail")
+    public ResponseEntity<List<Accounts>> checkEmail (@RequestParam String email) {
+        List<Accounts> accounts = iAccountService.checkEmail(email);
         return new ResponseEntity<>(accounts,HttpStatus.OK);
     }
 
@@ -61,5 +68,16 @@ public class AccountController {
         iAccountService.findAccountByUsername(username);
         iAccountService.addAccountInformation(username,information);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("getPassword")
+    public ResponseEntity<String> getPassword (@RequestHeader ("Authorization") String tokenHeader
+                                               ,@RequestParam Long id
+    ) {
+        String token = tokenHeader.substring(7);
+        String username = jwtService.getUsernameFromJwtToken(token);
+        iAccountService.findAccountByUsername(username);
+        String password = iAccountService.findPasswordById(username,id);
+        return new ResponseEntity<>(password,HttpStatus.OK);
     }
 }

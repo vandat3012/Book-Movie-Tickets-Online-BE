@@ -16,4 +16,12 @@ public interface IAccountRepository extends JpaRepository<Accounts,Long> {
 
     @Query(nativeQuery = true,value = "SELECT * from accounts a where a.username = :username")
     List<Accounts> checkUsername(@Param("username") String username);
+
+    @Query(nativeQuery = true,value = "SELECT * from accounts a where a.email = :email")
+    List<Accounts> checkEmail(@Param("email") String email);
+
+    @Query(nativeQuery = true,value = "SELECT a.password from accounts a where a.id = :id")
+    String findPasswordById(@Param("id") Long id);
+
+
 }
