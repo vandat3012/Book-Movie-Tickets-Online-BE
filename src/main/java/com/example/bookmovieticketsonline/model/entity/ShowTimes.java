@@ -26,6 +26,6 @@ public class ShowTimes {
     private Screens screens;
 
     @ManyToOne
-    @JoinColumn(name = "movies")
+    @JoinColumn(name = "movie_id")
     private Movies movies;
 }
