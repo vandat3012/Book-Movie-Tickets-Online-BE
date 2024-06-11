@@ -1,9 +1,9 @@
 package com.example.bookmovieticketsonline.model.dto;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
-public interface ShowtimeDTO {
+public interface SeatDTO {
     Long getId();
-    LocalTime getStart_time();
-    LocalTime getEnd_time();
+    String getSeat_number();
 }

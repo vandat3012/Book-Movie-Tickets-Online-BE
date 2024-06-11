@@ -16,7 +16,6 @@ public class Tickets {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String seat_number;
     private BigDecimal price;
     private String status;
 
@@ -27,4 +26,8 @@ public class Tickets {
     @ManyToOne
     @JoinColumn(name = "showtime_id")
     private ShowTimes showTimes;
+
+    @ManyToOne
+    @JoinColumn(name = "seat_id")
+    private Seats seats;
 }

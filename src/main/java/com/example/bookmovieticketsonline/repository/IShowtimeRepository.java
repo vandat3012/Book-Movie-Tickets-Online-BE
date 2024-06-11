@@ -22,7 +22,7 @@ public interface IShowtimeRepository extends JpaRepository<ShowTimes,Long> {
     List<InformationShowtimeDTO> getInfoByShow_date (@Param("show_date") LocalDate show_date,
                                                      @Param("id_theater") Long id_theater);
 
-    @Query(nativeQuery = true,value = "SELECT s.start_time, s.end_time\n" +
+    @Query(nativeQuery = true,value = "SELECT s.id ,s.start_time, s.end_time\n" +
             "FROM theaters t\n" +
             "JOIN screens sc ON t.id = sc.theater_id\n" +
             "JOIN showtimes s ON sc.id = s.screen_id\n" +
